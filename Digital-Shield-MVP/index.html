@@ -121,7 +121,7 @@ section.block{margin-top:72px}
 .plan{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px}
 .plan h3{font-size:16px;margin:0 0 10px}
 .price{font:800 30px Unbounded,sans-serif;letter-spacing:-.03em}
-.price small{font:700 14px Manrope,sans-serif;color:var(--muted);letter-spacing:0}
+.price small{display:block;margin-top:2px;font:700 14px Manrope,sans-serif;color:var(--muted);letter-spacing:0}
 .plan ul{padding:0;margin:16px 0 20px;list-style:none;font-size:14px;color:#2A3550;flex:1}
 .plan li{padding:5px 0 5px 24px;position:relative}
 .plan li:before{content:'';position:absolute;left:2px;top:11px;width:10px;height:6px;border-left:2.5px solid var(--blue);border-bottom:2.5px solid var(--blue);transform:rotate(-45deg)}
@@ -129,8 +129,9 @@ section.block{margin-top:72px}
 .plan.hot{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:0 18px 40px rgba(11,18,32,.25)}
 .plan.hot ul{color:#C9D5EE}.plan.hot .price small{color:#9FB0D0}
 .plan.hot li:before{border-color:var(--cyan)}
-.tag{position:absolute;top:-12px;left:24px;background:var(--cyan);color:var(--navy);font-weight:800;font-size:12px;border-radius:999px;padding:4px 12px}
-.plan .cat{position:absolute;right:14px;top:-50px;width:54px;height:84px;z-index:-1}
+.tag{position:absolute;top:-12px;left:24px;white-space:nowrap;background:var(--cyan);color:var(--navy);font-weight:800;font-size:12px;border-radius:999px;padding:4px 12px}
+.plan .cat{position:absolute;right:18px;top:-83px;width:54px;height:84px;filter:none}
+#pricing h2{margin-bottom:84px}
 .plan.spec{z-index:0}
 .pay{margin-top:16px;font-size:14px;color:var(--muted)}
 
@@ -151,7 +152,7 @@ progress{width:100%;accent-color:var(--blue)}
 dialog textarea{min-height:150px}
 .status{font-size:14px;color:var(--threat)}
 
-@media(max-width:960px){.plans{grid-template-columns:repeat(2,1fr);row-gap:58px}.art{flex-basis:260px}.art .big{width:160px;height:170px}}
+@media(max-width:960px){.plans{grid-template-columns:repeat(2,1fr);row-gap:96px}.art{flex-basis:260px}.art .big{width:160px;height:170px}}
 @media(max-width:820px){nav a:not(.help){display:none}.main{grid-template-columns:1fr}.side-wrap{margin-top:50px}.steps{grid-template-columns:1fr}}
 @media(max-width:640px){
  .wrap{width:calc(100% - 28px)}.bar{height:64px}.brand{font-size:17px}nav .help{font-size:13px;padding:7px 12px}
@@ -164,7 +165,7 @@ dialog textarea{min-height:150px}
  .main{margin-top:66px}.card{padding:20px}
  .actions{flex-direction:column;align-items:stretch}.actions .btn{justify-content:center}
  .assess{padding-right:20px;padding-bottom:20px}.assess .cat{position:static;display:block;margin:10px 0 -20px auto;height:90px}
- .plans{grid-template-columns:1fr;row-gap:16px}.plan.spec{margin-top:44px}
+ .plans{grid-template-columns:1fr;row-gap:16px}.plan.spec{margin-top:84px}
  .foot{flex-direction:column;align-items:flex-start}.foot .cat{display:none}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.spin{animation:none}}
@@ -231,17 +232,17 @@ dialog textarea{min-height:150px}
   </div>
  </section>
 
- <!-- Цены демонстрационные: поменяйте их на цифры из бизнес-отчёта -->
+ <!-- Цены из финансового плана (подписка 60 000 ₸, разовые услуги, помощь 5 000 ₸) -->
  <section class="block" id="pricing">
   <div class="kicker">Тарифы</div>
-  <h2>Защита по цене чашки кофе</h2>
+  <h2>Понятные цены без долгих контрактов</h2>
   <div class="plans">
-   <div class="plan"><h3>Первая проверка</h3><div class="price">0 ₸</div><ul><li>ИИ-проверка сообщения или ссылки</li><li>Отчёт VirusTotal</li><li>Чек-листы восстановления</li></ul><a class="btn ghost" href="#check">Проверить</a></div>
-   <div class="plan"><h3>Личный</h3><div class="price">1 490 ₸ <small>/ мес</small></div><ul><li>Безлимитные проверки</li><li>Проверка для всей семьи (до 4 человек)</li><li>1 консультация специалиста в месяц</li></ul><button class="btn ghost buy" data-plan="Личный">Подключить</button></div>
-   <div class="plan hot"><span class="tag">Для МСБ</span><h3>Бизнес</h3><div class="price">9 900 ₸ <small>/ мес</small></div><ul><li>До 10 сотрудников</li><li>Приоритетная помощь специалиста</li><li>Мини-обучение команды раз в квартал</li><li>Проверка поставщиков и реквизитов</li></ul><button class="btn buy" data-plan="Бизнес">Подключить</button></div>
-   <div class="plan spec"><img class="cat" src="/assets/spec-thumb.png" alt=""><h3>Специалист разово</h3><div class="price">5 000 ₸ <small>/ обращение</small></div><ul><li>Разбор инцидента</li><li>Восстановление доступа к аккаунту</li><li>План действий с банком</li></ul><a class="btn ghost" href="#help">Написать</a></div>
+   <div class="plan"><h3>Первая проверка</h3><div class="price">0 ₸ <small>без регистрации</small></div><ul><li>ИИ-проверка сообщения, ссылки или ситуации</li><li>Отчёт VirusTotal по ссылке</li><li>Чек-листы восстановления</li></ul><a class="btn ghost" href="#check">Проверить</a></div>
+   <div class="plan spec"><img class="cat" src="/assets/spec-thumb.png" alt=""><h3>Помощь специалиста</h3><div class="price">5 000 ₸ <small>/ обращение</small></div><ul><li>Для частных пользователей</li><li>Проверка на платформе или помощь с восстановлением аккаунта</li><li>Ответ специалиста в среднем до 60 минут</li></ul><a class="btn ghost" href="#help">Написать</a></div>
+   <div class="plan hot"><span class="tag">Для МСБ · 5–50 сотрудников</span><h3>Бизнес-подписка</h3><div class="price">60 000 ₸ <small>/ мес</small></div><ul><li>ИИ-платформа для всей команды</li><li>Техподдержка специалиста при инцидентах</li><li>Приоритетная очередь обращений</li><li>Отчёт о результатах раз в квартал</li><li>Без долгосрочного контракта</li></ul><button class="btn buy" data-plan="Бизнес-подписка">Подключить</button></div>
+   <div class="plan"><h3>Услуги для бизнеса</h3><div class="price">от 90 000 ₸ <small>за услугу</small></div><ul><li>Автоматический отчёт о безопасности — 150 000 ₸</li><li>Обучающий модуль для сотрудников — 120 000 ₸</li><li>Запрос техподдержки вне подписки — 90 000 ₸</li></ul><button class="btn ghost buy" data-plan="Разовые услуги">Заказать</button></div>
   </div>
-  <p class="pay">Оплата через Kaspi QR или картой. Первая проверка всегда бесплатная.</p>
+  <p class="pay">Оплата через Kaspi QR или картой. Первая проверка всегда бесплатная. Порекомендуйте нас другой компании — получите месяц подписки в подарок.</p>
  </section>
 </main>
 
@@ -317,13 +318,13 @@ $('#form').onsubmit=async e=>{e.preventDefault();const text=$('#entry').value.tr
   box.className='result assess r-'+v;box.replaceChildren(elem('div',r.source==='gemini'?'ИИ-оценка · Gemini':'Локальная проверка по признакам','src'),elem('div',V[v][0],'verdict v-'+v),elem('p',r.review),img('/assets/'+V[v][1]+'.png'));
   if(r.notice)box.append(elem('small',r.notice,'notice'));
   const vt=showVirusTotal(r.virusTotal);box.after(vt);
-  const next=elem('div','','next');const ex=elem('button',v==='low'?'Всё равно сомневаюсь — к специалисту':'Я уже кликнул(а) — нужна помощь →',v==='high'?'btn':'btn ghost');ex.onclick=()=>handoff('Проверял(а) через Digital Shield, результат: «'+V[v][0].replace('⚠ ','')+'».\nТекст:\n'+text+'\n\nЧто уже успел(а) сделать: ');next.append(ex);vt.after(next)
+  const next=elem('div','','next');const ex=elem('button',v==='low'?'Всё равно сомневаюсь — к специалисту':'Я уже кликнул(а) — помощь специалиста за 5 000 ₸ →',v==='high'?'btn':'btn ghost');ex.onclick=()=>handoff('Проверял(а) через Digital Shield, результат: «'+V[v][0].replace('⚠ ','')+'».\nТекст:\n'+text+'\n\nЧто уже успел(а) сделать: ');next.append(ex);vt.after(next)
  }catch(err){box.replaceChildren(elem('h3','Проверка недоступна'),elem('p',err.message))}
  finally{btn.disabled=false}};
 
 function handoff(text){const c=$('#content'),summary=elem('textarea'),send=elem('button','Отправить специалисту','btn'),status=elem('p','','status');
  summary.value=text;summary.maxLength=5000;summary.setAttribute('aria-label','Описание для специалиста');
- c.replaceChildren(elem('div','Помощь специалиста','kicker'),elem('h2','Опишите, что случилось'),elem('p','Что произошло, что вы уже успели сделать и с чем нужна помощь. Не пишите пароли, коды и номера карт — специалисту они не нужны.','small'),summary,send,status);
+ c.replaceChildren(elem('div','Помощь специалиста','kicker'),elem('h2','Опишите, что случилось'),elem('p','Что произошло, что вы уже успели сделать и с чем нужна помощь. Не пишите пароли, коды и номера карт — специалисту они не нужны.','small'),elem('p','Стоимость — 5 000 ₸ за обращение, для компаний с подпиской бесплатно. В прототипе оплата не подключена.','small'),summary,send,status);
  $('#modal').showModal();summary.focus();
  send.onclick=async()=>{if(!summary.value.trim()){summary.focus();return}send.disabled=true;
   try{const {id}=await post('cases',{summary:summary.value,verdict:lastVerdict});addThread(id);$('#modal').close()}
@@ -332,7 +333,7 @@ function addThread(id){const t=elem('div','','thread'),wait=elem('div','','wait'
  t.append(elem('h3','Обращение #'+id.slice(0,8)),wait);$('#threads').prepend(t);t.scrollIntoView({block:'nearest',behavior:'smooth'});
  const timer=setInterval(async()=>{try{const {answer}=await post('status',{id});if(answer){clearInterval(timer);const a=elem('div','','answer');a.append(img('/assets/spec-thumb.png'),elem('p',answer));wait.replaceWith(elem('div','Ответ специалиста','src'),a)}}catch(e){clearInterval(timer);wait.replaceChildren(elem('span',e.message))}},5000)}
 $('#ask').onclick=()=>handoff($('#entry').value.trim()?'Текст, который меня насторожил:\n'+$('#entry').value.trim()+'\n\nЧто случилось: ':'');
-all('.buy').forEach(b=>b.onclick=()=>{$('#content').replaceChildren(elem('div','Тариф «'+b.dataset.plan+'»','kicker'),elem('h2','Оплата скоро появится'),elem('p','В этом прототипе оплата через Kaspi QR ещё не подключена. Пока можно бесплатно проверить сообщение или написать специалисту.'));$('#modal').showModal()});
+all('.buy').forEach(b=>b.onclick=()=>{$('#content').replaceChildren(elem('div','Тариф «'+b.dataset.plan+'»','kicker'),elem('h2','Оплата скоро появится'),elem('p','В этом прототипе оплата через Kaspi QR ещё не подключена. Пока можно бесплатно проверить сообщение или написать специалисту — мы свяжемся и подключим вас вручную.'));$('#modal').showModal()});
 </script>
 </body>
 </html>
