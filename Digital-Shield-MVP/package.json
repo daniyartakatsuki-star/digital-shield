@@ -1,0 +1,9 @@
+{
+  "name": "digital-shield-mvp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Digital Shield - AI scam check + expert desk (classroom MVP)",
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": { "start": "node server.mjs" }
+}

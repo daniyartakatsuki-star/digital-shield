@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Digital Shield — рабочее место специалиста</title>
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0B1220;--blue:#2F6BFF;--blue-d:#1E52DB;--cyan:#3BD5FF;--threat:#FF4D4D;--warm:#FFB347;--ok:#1FB971;--bg:#F3F6FB;--ink:#0E1626;--muted:#56617A;--line:#E1E7F1;--soft:#EEF3FF}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Manrope,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.6;cursor:wait}:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+h1,h2{font-family:Unbounded,Manrope,sans-serif;letter-spacing:-.02em;line-height:1.15}
+.wrap{width:min(880px,calc(100% - 40px));margin:auto}
+.cat{image-rendering:pixelated;pointer-events:none;user-select:none}
+.bar{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{display:inline-flex;align-items:center;gap:10px;font:800 19px Unbounded,sans-serif;letter-spacing:-.03em}
+.brand svg{width:28px;height:30px;color:var(--blue)}
+.pill{font-size:13px;font-weight:800;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px}
+.hero{position:relative;overflow:hidden;border-radius:26px;background:var(--navy);color:#fff;padding:36px 44px;min-height:210px;display:flex;align-items:center;justify-content:space-between;isolation:isolate}
+.hero:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(rgba(59,213,255,.07) 1px,transparent 1px) 0 0/44px 44px,linear-gradient(90deg,rgba(59,213,255,.07) 1px,transparent 1px) 0 0/44px 44px}
+.eyebrow{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+.hero h1{font-size:clamp(28px,4vw,42px);margin:10px 0 8px}
+.hero p{margin:0;color:#C9D5EE;max-width:440px}
+.hero .cat{align-self:flex-end;margin-bottom:-36px;width:120px;height:150px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45))}
+.queuebar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:30px 0 14px}
+.queuebar h2{margin:0;font-size:22px}
+.live{font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.btn{border:0;border-radius:12px;padding:11px 18px;font-weight:800;font-size:14px;background:var(--blue);color:#fff}
+.btn:hover{background:var(--blue-d)}.btn.ghost{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+.empty{display:flex;align-items:center;gap:20px;padding:22px 26px;border:2px dashed #C9D3E6;border-radius:20px;background:#fff;color:var(--muted)}
+.empty .cat{width:84px;height:120px;flex:none}
+.empty b{display:block;color:var(--ink);font-size:17px;margin-bottom:4px}
+article{background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px 24px;margin-bottom:16px;border-left:5px solid var(--blue)}
+article.done{border-left-color:var(--ok)}
+article.fresh{animation:fresh 1.6s ease}
+@keyframes fresh{from{box-shadow:0 0 0 6px rgba(59,213,255,.5)}to{box-shadow:none}}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.meta strong{color:var(--ink);font-family:Unbounded,sans-serif;font-size:13px}
+.badge{border-radius:999px;padding:3px 10px;font-weight:800;font-size:12px}
+.v-high{background:#FFE8E8;color:#C42727}.v-medium{background:#FFF1DC;color:#A85F00}.v-low{background:#E2F7EC;color:#11804C}.v-unknown,.v-{background:var(--soft);color:var(--blue)}
+.st-done{background:#E2F7EC;color:#11804C}.st-new{background:#FFF1DC;color:#A85F00}
+article p{white-space:pre-line;overflow-wrap:anywhere;margin:12px 0;background:#F7F9FD;border-radius:12px;padding:12px 14px}
+textarea{display:block;width:100%;min-height:110px;margin:6px 0 10px;padding:12px 14px;border:1.5px solid #CCD5E4;border-radius:12px;resize:vertical}
+textarea:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 4px rgba(47,107,255,.15)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tpl{background:var(--soft);color:var(--blue);border:0;border-radius:999px;padding:5px 12px;font-size:12px;font-weight:800}
+.sent{font-size:13px;color:var(--ok);font-weight:700}
+.err{padding:18px;border-radius:14px;background:#FFE8E8;color:#C42727}
+@media(max-width:640px){.hero{padding:28px 22px}.hero .cat{width:84px;height:105px;margin-bottom:-28px}.queuebar{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="mark" viewBox="0 0 256 272"><path d="M128 20 L214 54 V125 C214 183 172 223 128 250 C112 241 99 231 87 219 L50 234 L61 191 C46 169 42 147 42 125 V54 Z" fill="none" stroke="currentColor" stroke-width="18" stroke-linejoin="round"/><path d="M87 131 L116 160 L173 101" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/></symbol></defs></svg>
+<header class="wrap bar"><div class="brand"><svg><use href="#mark"/></svg>Digital Shield</div><span class="pill">Только для специалистов</span></header>
+<main class="wrap">
+ <section class="hero"><div><div class="eyebrow">Рабочее место специалиста</div><h1>Обращения клиентов</h1><p>Прочитайте, что случилось, и ответьте понятным первым шагом. Клиент увидит ответ сразу на своей странице.</p></div><img class="cat" src="/assets/spec-explain.png" alt=""></section>
+ <div class="queuebar"><h2>Очередь</h2><div class="row"><span class="live"><i></i>обновляется каждые 5 секунд</span><button id="refresh" class="btn ghost">Обновить</button></div></div>
+ <div id="queue" aria-live="polite"></div>
+</main>
+<script>
+const token=location.hash.slice(1);history.replaceState(null,'','/expert');const queue=document.querySelector('#queue');
+async function call(path,data){const r=await fetch('/api/'+path,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify(data)});const result=await r.json().catch(()=>({error:'Сервер не ответил.'}));if(!r.ok)throw Error(result.error);return result}
+function node(tag,text,cls){const n=document.createElement(tag);if(text)n.textContent=text;if(cls)n.className=cls;return n}
+const VL={high:'Высокий риск',medium:'Подозрительно',low:'Риск низкий',unknown:'Без оценки'};
+const TPL=[['Карта/код','Срочно позвоните в банк по номеру на обороте карты или через официальное приложение и попросите заблокировать карту. Не перезванивайте на номер, с которого вам звонили. Затем смените пароль и PIN мобильного банка, сохраните скриншоты переписки — я помогу с заявлением.'],
+['Аккаунт','Откройте приложение и запустите восстановление доступа. С надёжного устройства смените пароль, завершите все чужие сеансы и включите двухфакторную защиту. Предупредите контакты, что от вашего имени могут просить деньги.'],
+['Ссылка','Если вы только открыли ссылку и ничего не вводили — закройте её и ничего не скачивайте. Если вводили пароль или данные карты, напишите, что именно, и я дам следующий шаг.']];
+const shown=new Map();
+function render(c){
+ const a=node('article','',c.answer?'done':''),m=node('div','','meta'),st=node('span',c.answer?'Ответ отправлен':'Ждёт ответа','badge '+(c.answer?'st-done':'st-new'));
+ m.append(node('strong','#'+c.id.slice(0,8)),node('span',new Date(c.created).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'})),st);
+ if(c.verdict)m.append(node('span','ИИ: '+VL[c.verdict],'badge v-'+c.verdict));
+ const t=node('textarea'),b=node('button','Отправить ответ','btn'),s=node('span','','sent'),tp=node('div','','row');
+ t.maxLength=4000;t.placeholder='Ваш ответ клиенту…';t.setAttribute('aria-label','Ответ клиенту');t.value=c.answer;
+ for(const [label,text] of TPL){const x=node('button',label,'tpl');x.type='button';x.onclick=()=>{t.value=text;t.focus()};tp.append(x)}
+ tp.prepend(node('span','Шаблоны:','live'));
+ b.onclick=async()=>{if(!t.value.trim())return t.focus();b.disabled=true;try{await call('reply',{id:c.id,answer:t.value});s.textContent='✓ Ответ отправлен клиенту';st.textContent='Ответ отправлен';st.className='badge st-done';a.classList.add('done')}catch(e){s.textContent=e.message}finally{b.disabled=false}};
+ const actions=node('div','','row');actions.append(b,s);
+ a.append(m,node('p',c.summary),tp,t,actions);return a}
+function empty(){const e=node('div','','empty'),i=document.createElement('img');i.className='cat';i.src='/assets/spec-wave.png';i.alt='';const d=node('div');d.append(node('b','Новых обращений нет'),node('span','Как только клиент нажмёт «Написать специалисту», обращение появится здесь.'));e.append(i,d);return e}
+let first=true;
+async function load(){
+ try{const cases=await call('queue',{});
+  if(!cases.length){if(!shown.size)queue.replaceChildren(empty());return}
+  if(!shown.size)queue.replaceChildren();
+  for(const c of cases.slice().reverse()){if(shown.has(c.id))continue;const el=render(c);if(!first)el.classList.add('fresh');shown.set(c.id,el);queue.prepend(el)}
+  first=false}
+ catch(e){queue.replaceChildren(node('div',e.message,'err'))}}
+document.querySelector('#refresh').onclick=load;load();setInterval(()=>{if(!document.hidden)load()},5000);
+</script>
+</body>
+</html>

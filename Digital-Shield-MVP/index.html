@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Digital Shield — проверь, прежде чем кликнуть</title>
+<meta name="description" content="Бесплатная ИИ-проверка подозрительных сообщений и ссылок и помощь специалиста при взломе. Для малого бизнеса и людей в Казахстане.">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Unbounded:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0B1220;--navy2:#121C33;--blue:#2F6BFF;--blue-d:#1E52DB;--cyan:#3BD5FF;--threat:#FF4D4D;--warm:#FFB347;--ok:#1FB971;
+--bg:#F3F6FB;--card:#fff;--ink:#0E1626;--muted:#56617A;--line:#E1E7F1;--soft:#EEF3FF}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Manrope,"Segoe UI",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit}button{cursor:pointer;color:inherit}button:disabled{opacity:.6;cursor:wait}
+a{color:var(--blue)}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:3px}
+h1,h2,h3{font-family:Unbounded,Manrope,sans-serif;letter-spacing:-.02em;line-height:1.15}
+.wrap{width:min(1160px,calc(100% - 48px));margin:auto}
+.cat{image-rendering:pixelated;pointer-events:none;user-select:none;filter:drop-shadow(0 6px 8px rgba(11,18,32,.18))}
+
+/* header */
+.bar{display:flex;align-items:center;justify-content:space-between;height:76px;gap:16px}
+.brand{display:inline-flex;align-items:center;gap:10px;font:800 20px Unbounded,sans-serif;letter-spacing:-.03em;color:var(--ink);text-decoration:none}
+.brand svg{width:30px;height:32px}
+nav{display:flex;gap:6px;align-items:center}
+nav a{color:var(--ink);text-decoration:none;font-weight:700;font-size:14px;padding:8px 12px;border-radius:999px}
+nav a:hover{background:var(--soft);color:var(--blue)}
+nav .help{border:2px solid var(--blue);color:var(--blue)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-radius:28px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:52px 56px;min-height:340px;isolation:isolate}
+.hero:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(rgba(59,213,255,.07) 1px,transparent 1px) 0 0/48px 48px,linear-gradient(90deg,rgba(59,213,255,.07) 1px,transparent 1px) 0 0/48px 48px}
+.hero:after{content:'';position:absolute;z-index:-1;right:-120px;top:-160px;width:640px;height:640px;background:radial-gradient(closest-side,rgba(47,107,255,.45),transparent)}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--cyan)}
+.eyebrow i{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.hero h1{font-size:clamp(34px,4.6vw,60px);margin:14px 0 14px;font-weight:800}
+.hero h1 span{color:var(--cyan)}
+.hero p{max-width:520px;color:#C9D5EE;margin:0 0 26px;font-size:17px}
+.cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:13px 20px;font-weight:800;font-size:15px;text-decoration:none;background:var(--blue);color:#fff;box-shadow:0 8px 24px rgba(47,107,255,.35)}
+.btn:hover{background:var(--blue-d)}
+.btn.ghost{background:transparent;color:var(--blue);box-shadow:none;border:2px solid var(--blue)}
+.btn.ghost:hover{background:var(--soft)}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(59,213,255,.4);color:#E6F7FF;border-radius:999px;padding:9px 16px;font-weight:700;font-size:14px;background:rgba(59,213,255,.08)}
+.art{position:relative;flex:0 0 330px;height:250px}
+.art .big{position:absolute;right:10px;top:4px;width:200px;height:212px;filter:drop-shadow(0 0 22px rgba(59,213,255,.75))}
+.art .cat{position:absolute;left:18px;bottom:-6px;width:82px;height:200px;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45))}
+.art .ping{position:absolute;right:-6px;bottom:20px;background:#fff;color:var(--ink);border-radius:14px 14px 4px 14px;padding:10px 14px;font-weight:800;font-size:13px;box-shadow:0 10px 24px rgba(0,0,0,.35);display:flex;gap:8px;align-items:center}
+.art .ping b{color:#D7263D}
+
+/* main area */
+.main{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:22px;margin:76px 0 0;align-items:start}
+.card{position:relative;z-index:1;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:0 6px 24px rgba(14,22,38,.05)}
+.head{display:flex;gap:12px;align-items:center}
+.head h2{margin:0;font-size:22px}
+.icon{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--soft);color:var(--blue)}
+.icon svg{width:22px;height:22px}
+.tabs{display:flex;margin:22px 0 16px;gap:4px;padding:4px;border-radius:14px;background:#EDF1F8}
+.tabs button{flex:1;border:0;background:transparent;border-radius:10px;font-size:14px;font-weight:700;padding:10px;color:var(--muted)}
+.tabs .active{background:#fff;color:var(--blue);box-shadow:0 1px 6px rgba(14,22,38,.1)}
+.fieldtop{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.fieldtop label{font-weight:800;font-size:14px}
+.link{background:transparent;border:0;color:var(--blue);font-weight:800;font-size:14px;padding:4px}
+textarea{display:block;width:100%;min-height:130px;margin:8px 0 14px;padding:14px 16px;resize:vertical;border:1.5px solid #CCD5E4;border-radius:14px;color:inherit;background:#FBFCFE}
+textarea:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 4px rgba(47,107,255,.15)}
+.actions{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.small{font-size:13px;color:var(--muted)}
+details{font-size:13px;color:var(--muted);margin-top:12px}summary{cursor:pointer;font-weight:700}
+
+/* results */
+.result{position:relative;border-radius:16px;background:#F7F9FD;border:1px solid var(--line);padding:20px 22px;margin-top:18px;overflow-wrap:anywhere}
+.result h3{margin:0 0 6px;font-size:17px}
+.result p{margin:8px 0;white-space:pre-line}
+.verdict{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:6px 14px;font-weight:800;font-size:14px;margin-bottom:6px}
+.v-high{background:#FFE8E8;color:#C42727}.v-medium{background:#FFF1DC;color:#A85F00}.v-low{background:#E2F7EC;color:#11804C}.v-unknown{background:var(--soft);color:var(--blue)}
+.r-high{border-left:5px solid var(--threat)}.r-medium{border-left:5px solid var(--warm)}.r-low{border-left:5px solid var(--ok)}.r-unknown{border-left:5px solid var(--blue)}
+.assess{padding-right:96px;min-height:150px}
+.assess .cat{position:absolute;right:16px;bottom:0;height:120px}
+.src{font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.notice{display:block;margin-top:10px;font-size:12px;color:var(--muted)}
+.vt{background:#F2FAFD;border-left:5px solid #2A9BC0}
+.vt-counts{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.vt-counts span{background:#fff;border:1px solid var(--line);border-radius:8px;padding:3px 9px;font-size:13px}
+.vt-counts .bad{border-color:#FFB3B3;color:#C42727;font-weight:800}
+.vt details ul{max-height:220px;overflow:auto}
+.next{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:16px}
+.loading{display:flex;align-items:center;gap:12px;font-weight:700}
+.spin{width:22px;height:22px;border-radius:50%;border:3px solid #D5DFF0;border-top-color:var(--blue);animation:s .8s linear infinite}
+@keyframes s{to{transform:rotate(1turn)}}
+
+/* side */
+.side-wrap{position:relative}
+.side-wrap .peek{position:absolute;z-index:0;right:26px;top:-58px;width:60px;height:128px}
+.sub{font-size:15px;color:var(--muted);margin:14px 0 16px}
+.side .btn{width:100%;justify-content:center}
+.guides-title{margin:24px 0 4px;font-weight:800;font-size:14px}
+.row{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:transparent;border:0;border-top:1px solid var(--line);padding:12px 0;font-weight:700;font-size:14px}
+.row:hover{color:var(--blue)}
+.row .mini{flex:none;width:30px;height:30px;border-radius:9px;background:var(--soft);color:var(--blue);display:grid;place-items:center;font-size:15px}
+.row span:last-child{margin-left:auto;color:var(--muted)}
+.thread{margin-top:16px;border-radius:16px;border:1px solid var(--line);background:#F7F9FD;padding:16px 18px}
+.thread h3{margin:0 0 6px;font-size:15px}
+.thread .wait{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:14px}
+.thread .wait .spin{width:16px;height:16px;border-width:2px}
+.answer{display:flex;gap:12px;align-items:flex-end;margin-top:8px}
+.answer .cat{flex:none;width:54px;height:84px;filter:none}
+.answer p{margin:0;background:#fff;border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:12px 14px;white-space:pre-line;font-size:14px}
+
+/* sections */
+section.block{margin-top:72px}
+.kicker{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+.block h2{font-size:clamp(26px,3vw,36px);margin:8px 0 24px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.step{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px}
+.step b{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:10px;background:var(--navy);color:var(--cyan);font:800 15px Unbounded,sans-serif}
+.step h3{font-size:17px;margin:14px 0 6px}
+.step p{margin:0;color:var(--muted);font-size:15px}
+.plans{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;align-items:stretch}
+.plan{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px}
+.plan h3{font-size:16px;margin:0 0 10px}
+.price{font:800 30px Unbounded,sans-serif;letter-spacing:-.03em}
+.price small{font:700 14px Manrope,sans-serif;color:var(--muted);letter-spacing:0}
+.plan ul{padding:0;margin:16px 0 20px;list-style:none;font-size:14px;color:#2A3550;flex:1}
+.plan li{padding:5px 0 5px 24px;position:relative}
+.plan li:before{content:'';position:absolute;left:2px;top:11px;width:10px;height:6px;border-left:2.5px solid var(--blue);border-bottom:2.5px solid var(--blue);transform:rotate(-45deg)}
+.plan .btn{justify-content:center}
+.plan.hot{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:0 18px 40px rgba(11,18,32,.25)}
+.plan.hot ul{color:#C9D5EE}.plan.hot .price small{color:#9FB0D0}
+.plan.hot li:before{border-color:var(--cyan)}
+.tag{position:absolute;top:-12px;left:24px;background:var(--cyan);color:var(--navy);font-weight:800;font-size:12px;border-radius:999px;padding:4px 12px}
+.plan .cat{position:absolute;right:14px;top:-50px;width:54px;height:84px;z-index:-1}
+.plan.spec{z-index:0}
+.pay{margin-top:16px;font-size:14px;color:var(--muted)}
+
+footer{margin-top:80px;background:var(--navy);color:#C9D5EE}
+.foot{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;padding:36px 0 30px;position:relative}
+.foot .brand{color:#fff}
+.foot .slogan{font:700 18px Unbounded,sans-serif;color:#fff;margin:10px 0 4px}
+.foot .meta{font-size:13px;color:#8E9DBC}
+.foot .cat{width:36px;height:72px;filter:none}
+
+dialog{width:min(540px,94vw);border:0;border-radius:22px;padding:28px;color:inherit;box-shadow:0 30px 80px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(11,18,32,.6)}
+dialog h2{font-size:20px;margin:0 0 10px}
+.close{float:right;width:34px;height:34px;border:0;border-radius:50%;background:#EDF1F8;font-size:20px;line-height:1}
+.chk{display:flex;gap:12px;align-items:baseline;border-bottom:1px solid var(--line);padding:12px 0;font-size:15px}
+.chk input{accent-color:var(--blue);transform:scale(1.15)}
+progress{width:100%;accent-color:var(--blue)}
+dialog textarea{min-height:150px}
+.status{font-size:14px;color:var(--threat)}
+
+@media(max-width:960px){.plans{grid-template-columns:repeat(2,1fr);row-gap:58px}.art{flex-basis:260px}.art .big{width:160px;height:170px}}
+@media(max-width:820px){nav a:not(.help){display:none}.main{grid-template-columns:1fr}.side-wrap{margin-top:50px}.steps{grid-template-columns:1fr}}
+@media(max-width:640px){
+ .wrap{width:calc(100% - 28px)}.bar{height:64px}.brand{font-size:17px}nav .help{font-size:13px;padding:7px 12px}
+ .hero{flex-direction:column;align-items:flex-start;padding:30px 22px 0;min-height:0}
+ .hero p{font-size:15px}
+ .art{flex:none;width:100%;height:170px;margin-top:6px}
+ .art .big{width:118px;height:125px;right:auto;left:120px;top:12px}
+ .art .cat{left:20px;width:62px;height:150px}
+ .art .ping{display:none}
+ .main{margin-top:66px}.card{padding:20px}
+ .actions{flex-direction:column;align-items:stretch}.actions .btn{justify-content:center}
+ .assess{padding-right:20px;padding-bottom:20px}.assess .cat{position:static;display:block;margin:10px 0 -20px auto;height:90px}
+ .plans{grid-template-columns:1fr;row-gap:16px}.plan.spec{margin-top:44px}
+ .foot{flex-direction:column;align-items:flex-start}.foot .cat{display:none}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.spin{animation:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+ <symbol id="mark" viewBox="0 0 256 272"><path d="M128 20 L214 54 V125 C214 183 172 223 128 250 C112 241 99 231 87 219 L50 234 L61 191 C46 169 42 147 42 125 V54 Z" fill="none" stroke="currentColor" stroke-width="18" stroke-linejoin="round"/><path d="M87 131 L116 160 L173 101" fill="none" stroke="currentColor" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</defs></svg>
+
+<header class="wrap bar">
+ <a class="brand" href="/"><svg style="color:var(--blue)"><use href="#mark"/></svg>Digital Shield</a>
+ <nav aria-label="Навигация"><a href="#check">Проверка</a><a href="#how">Как это работает</a><a href="#pricing">Тарифы</a><a class="help" href="#help">Помощь специалиста</a></nav>
+</header>
+
+<main class="wrap">
+ <section class="hero">
+  <div>
+   <div class="eyebrow"><i></i>Кибербезопасность для малого бизнеса и людей</div>
+   <h1>Проверь, прежде<br>чем <span>кликнуть</span></h1>
+   <p>Вставьте подозрительное сообщение или ссылку — ИИ и база VirusTotal оценят риск за несколько секунд. А если беда уже случилась, подключится живой специалист.</p>
+   <div class="cta"><a class="btn" href="#check">Проверить бесплатно →</a><span class="chip">✓ Первая проверка — бесплатно</span></div>
+  </div>
+  <div class="art" aria-hidden="true">
+   <svg class="big" style="color:var(--cyan)"><use href="#mark"/></svg>
+   <img class="cat" src="/assets/jade-typing.png" alt="">
+   <div class="ping">Проверено: <b>мошенники</b></div>
+  </div>
+ </section>
+
+ <div class="main">
+  <section class="card" id="check">
+   <div class="head"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></span><h2>Бесплатная ИИ-проверка</h2></div>
+   <div class="tabs" role="group" aria-label="Что проверяем"><button type="button">Сообщение</button><button type="button">Ссылка</button><button type="button">Ситуация</button></div>
+   <form id="form">
+    <div class="fieldtop"><label id="label" for="entry"></label><button class="link" id="example" type="button">Пример ↻</button></div>
+    <textarea id="entry" required maxlength="5000"></textarea>
+    <div class="actions"><span class="small">Текст оценивает ИИ Gemini, первую ссылку ищем в базе VirusTotal.</span><button class="btn" id="go">Проверить →</button></div>
+    <details><summary>Что происходит с моим текстом</summary><p>Текст отправляется в Google Gemini для оценки; на бесплатном тарифе Google может использовать его для улучшения сервисов. Первая ссылка из текста отправляется в VirusTotal. Не вставляйте пароли, коды из SMS, номера карт и личные данные — для проверки они не нужны.</p></details>
+   </form>
+   <div id="output" aria-live="polite"></div>
+  </section>
+
+  <div class="side-wrap" id="help">
+   <img class="cat peek" src="/assets/alex-think.png" alt="">
+   <aside class="card side">
+    <div class="head"><span class="icon" style="background:#FFEDED;color:var(--threat)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 3v6c0 4.5-3.4 7.7-8 9-4.6-1.3-8-4.5-8-9V6z"/><path d="M12 8v5M12 16.5v.01"/></svg></span><h2>Помощь специалиста</h2></div>
+    <p class="sub">Уже перешли по ссылке, оплатили или сообщили код? Специалист подскажет, что делать прямо сейчас.</p>
+    <button id="ask" class="btn">Написать специалисту →</button>
+    <p class="guides-title">Чек-листы восстановления</p>
+    <div id="guides"></div>
+    <div id="threads" aria-live="polite"></div>
+   </aside>
+  </div>
+ </div>
+
+ <section class="block" id="how">
+  <div class="kicker">Как это работает</div>
+  <h2>Три шага до спокойствия</h2>
+  <div class="steps">
+   <div class="step"><b>1</b><h3>Вставьте</h3><p>Сообщение из WhatsApp, SMS или почты, ссылку или просто опишите, что случилось.</p></div>
+   <div class="step"><b>2</b><h3>Узнайте риск</h3><p>ИИ ищет признаки мошенничества, а VirusTotal показывает, что о ссылке думают 90+ антивирусов.</p></div>
+   <div class="step"><b>3</b><h3>Получите помощь</h3><p>Если вы уже кликнули или заплатили — специалист Digital Shield поможет вернуть доступ и закрыть дыры.</p></div>
+  </div>
+ </section>
+
+ <!-- Цены демонстрационные: поменяйте их на цифры из бизнес-отчёта -->
+ <section class="block" id="pricing">
+  <div class="kicker">Тарифы</div>
+  <h2>Защита по цене чашки кофе</h2>
+  <div class="plans">
+   <div class="plan"><h3>Первая проверка</h3><div class="price">0 ₸</div><ul><li>ИИ-проверка сообщения или ссылки</li><li>Отчёт VirusTotal</li><li>Чек-листы восстановления</li></ul><a class="btn ghost" href="#check">Проверить</a></div>
+   <div class="plan"><h3>Личный</h3><div class="price">1 490 ₸ <small>/ мес</small></div><ul><li>Безлимитные проверки</li><li>Проверка для всей семьи (до 4 человек)</li><li>1 консультация специалиста в месяц</li></ul><button class="btn ghost buy" data-plan="Личный">Подключить</button></div>
+   <div class="plan hot"><span class="tag">Для МСБ</span><h3>Бизнес</h3><div class="price">9 900 ₸ <small>/ мес</small></div><ul><li>До 10 сотрудников</li><li>Приоритетная помощь специалиста</li><li>Мини-обучение команды раз в квартал</li><li>Проверка поставщиков и реквизитов</li></ul><button class="btn buy" data-plan="Бизнес">Подключить</button></div>
+   <div class="plan spec"><img class="cat" src="/assets/spec-thumb.png" alt=""><h3>Специалист разово</h3><div class="price">5 000 ₸ <small>/ обращение</small></div><ul><li>Разбор инцидента</li><li>Восстановление доступа к аккаунту</li><li>План действий с банком</li></ul><a class="btn ghost" href="#help">Написать</a></div>
+  </div>
+  <p class="pay">Оплата через Kaspi QR или картой. Первая проверка всегда бесплатная.</p>
+ </section>
+</main>
+
+<footer>
+ <div class="wrap foot">
+  <div>
+   <a class="brand" href="/"><svg style="color:var(--cyan)"><use href="#mark"/></svg>Digital Shield</a>
+   <div class="slogan">Проверь, прежде чем кликнуть</div>
+   <div class="meta">Учебный прототип · AITU, CS-2426 · Stanbak Y., Myrzabek D., Esanov A.</div>
+  </div>
+  <img class="cat" src="/assets/jade-wave.png" alt="">
+ </div>
+</footer>
+
+<dialog id="modal"><button class="close" aria-label="Закрыть">×</button><div id="content"></div></dialog>
+
+<script>
+const $=s=>document.querySelector(s), all=s=>Array.from(document.querySelectorAll(s));
+function elem(tag,txt,cls){const e=document.createElement(tag);if(txt)e.textContent=txt;if(cls)e.className=cls;return e}
+function img(src,cls){const i=document.createElement('img');i.src=src;i.alt='';i.className='cat '+(cls||'');return i}
+
+const modes=[
+ {label:'Подозрительное сообщение',ph:'Вставьте сообщение из WhatsApp, SMS, Telegram или почты…',kind:'message',examples:[
+  'Здравствуйте! Это ТОО «Оптовик». Только сегодня скидка 70% на кофейные зёрна оптом. Чтобы забронировать, внесите предоплату по ссылке http://optovik-sale.example/oplata — предложение действует 1 час!',
+  'Kaspi Bank: по вашей карте зафиксирована подозрительная операция на 148 500 ₸. Если это не вы, срочно перейдите по ссылке https://kaspi-bezopasnost.example/stop и подтвердите данные карты.',
+  'Казпочта: ваша посылка задержана на складе. Оплатите хранение 490 ₸ в течение 24 часов, иначе посылка будет возвращена отправителю.',
+  'Мама, это мой новый номер, старый телефон разбился. Срочно переведи 50 000 ₸ на карту 4400…, потом всё объясню.']},
+ {label:'Ссылка на сайт',ph:'Вставьте адрес сайта, например https://…',kind:'link',examples:[
+  'https://kaspi.kz.secure-login.example/verify','http://bit.ly/egov-vyplata-2026','https://example.com/']},
+ {label:'Опишите ситуацию',ph:'Расскажите своими словами, что произошло…',kind:'situation',examples:[
+  'Позвонили из «службы безопасности банка», сказали, что на меня оформляют кредит. Попросили продиктовать код из SMS, чтобы его отменить, и я продиктовал.',
+  'Поставщик написал в WhatsApp, что у них сменились реквизиты, и просит оплатить счёт на новый счёт сегодня.',
+  'На OLX покупатель прислал ссылку «для получения оплаты», я ввёл туда данные карты.']}];
+const drafts=['','',''],exIdx=[0,0,0];let mode=0,lastVerdict='';
+function setMode(i){drafts[mode]=$('#entry').value;mode=i;all('.tabs button').forEach((b,j)=>{b.classList.toggle('active',j===i);b.setAttribute('aria-pressed',j===i)});$('#label').textContent=modes[i].label;$('#entry').placeholder=modes[i].ph;$('#entry').value=drafts[i];$('#output').replaceChildren()}
+all('.tabs button').forEach((b,i)=>b.onclick=()=>setMode(i));setMode(0);
+$('#example').onclick=()=>{const m=modes[mode];$('#entry').value=m.examples[exIdx[mode]%m.examples.length];exIdx[mode]++;$('#output').replaceChildren();$('#entry').focus()};
+$('#entry').oninput=()=>$('#output').replaceChildren();
+
+const guides=[
+ ['Взломали аккаунт (WhatsApp, Instagram, почта)','👤',['Откройте сервис через официальное приложение. Если доступа нет — запустите восстановление аккаунта.','С надёжного устройства смените пароль — и везде, где он повторялся.','Завершите все чужие сеансы, удалите незнакомые устройства, почты и номера для восстановления.','Включите двухфакторную защиту (код или ключ входа).','Предупредите контакты: от вашего имени могут просить деньги.']],
+ ['Сообщил данные карты или код из SMS','💳',['Сразу позвоните в банк по номеру на обороте карты или через официальное приложение. Не перезванивайте на номер, с которого звонили вам.','Попросите заблокировать карту и проверить последние операции и заявки на кредит.','Смените пароль и PIN мобильного банка.','Сохраните скриншоты переписки, номера телефонов и чеки — они нужны для заявления.','Подайте заявление в полицию (102).']],
+ ['Перешёл по подозрительной ссылке','🔗',['Закройте страницу, ничего не скачивайте и не устанавливайте.','Если вводили пароль — откройте чек-лист «Взломали аккаунт». Если данные карты — чек-лист про карту.','Обновите телефон и запустите проверку антивирусом.','Для рабочего устройства — сообщите ответственному за IT.']],
+ ['Перевёл деньги мошенникам','💸',['Немедленно позвоните в свой банк: чем быстрее, тем выше шанс остановить перевод.','Сообщите реквизиты получателя, сумму и время перевода.','Сохраните все доказательства: переписку, чеки, номера.','Подайте заявление в полицию (102) и сообщите номер заявления банку.']]];
+const done=guides.map(g=>g[2].map(()=>false));
+function showGuide(i){const c=$('#content');c.replaceChildren(elem('div','Чек-лист','kicker'),elem('h2',guides[i][0]));const count=elem('p','','small'),p=document.createElement('progress');c.append(count,p);p.max=done[i].length;
+ function update(){p.value=done[i].filter(Boolean).length;count.textContent=p.value===p.max?'Готово! Если что-то не получилось — напишите специалисту.':'Выполнено '+p.value+' из '+p.max}
+ guides[i][2].forEach((s,j)=>{const l=elem('label','','chk'),b=document.createElement('input');b.type='checkbox';b.checked=done[i][j];b.onchange=()=>{done[i][j]=b.checked;update()};l.append(b,elem('span',s));c.append(l)});
+ const more=elem('button','Нужна помощь специалиста →','btn');more.style.marginTop='18px';more.onclick=()=>handoff('Ситуация: '+guides[i][0]+'. ');c.append(more);update();$('#modal').showModal()}
+guides.forEach((g,i)=>{const b=elem('button','','row');b.append(elem('span',g[1],'mini'),elem('span',g[0]),elem('span','›'));b.onclick=()=>showGuide(i);$('#guides').append(b)});
+$('.close').onclick=()=>$('#modal').close();
+
+async function post(path,data){const r=await fetch('/api/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const result=await r.json().catch(()=>({error:'Сервер не ответил.'}));if(!r.ok)throw Error(result.error);return result}
+
+const V={high:['⚠ Высокий риск — похоже на мошенничество','jade-squint'],medium:['Есть подозрительные признаки','jade-show'],low:['Явных признаков мошенничества нет','jade-joy'],unknown:['Оценка риска','jade-show']};
+function showVirusTotal(report){
+ const card=elem('section','','result vt');card.append(elem('h3','Отчёт VirusTotal по ссылке'));
+ if(report.url)card.append(elem('p',report.url,'small'));
+ if(report.notice){card.append(elem('p',report.notice));return card}
+ const stats=report.stats,total=Object.values(stats).reduce((a,b)=>a+b,0),flags=(stats.malicious||0)+(stats.suspicious||0);
+ card.append(elem('strong',flags?('⚠ '+flags+' из '+total+' антивирусов считают ссылку опасной'):('Ни один из '+total+' антивирусов не отметил ссылку')));
+ const labels={malicious:'Вредоносная',suspicious:'Подозрительная',harmless:'Безопасная',undetected:'Нет данных',timeout:'Таймаут'},counts=elem('div','','vt-counts');
+ for(const k of new Set([...Object.keys(labels),...Object.keys(stats)])){const s=elem('span',(labels[k]||k)+' · '+(stats[k]||0));if((k==='malicious'||k==='suspicious')&&stats[k])s.className='bad';counts.append(s)}
+ card.append(counts,elem('small',report.date?'Последний анализ: '+new Date(report.date*1000).toLocaleString('ru-RU'):'Дата анализа неизвестна.','notice'),elem('small','«Нет данных» значит, что антивирус ничего не нашёл. Ноль срабатываний ещё не гарантирует, что ссылка безопасна.','notice'));
+ if(report.vendors.length){const d=elem('details');d.append(elem('summary','Результаты антивирусов ('+report.vendors.length+')'));const ul=elem('ul');for(const v of report.vendors)ul.append(elem('li',v.name+' — '+(labels[v.category]||v.category)+(v.result&&v.result!==v.category?' ('+v.result+')':'')));d.append(ul);card.append(d)}
+ if(report.link){const a=elem('a','Открыть полный отчёт на VirusTotal ↗');a.href=report.link;a.target='_blank';a.rel='noopener noreferrer';card.append(a)}
+ return card}
+
+$('#form').onsubmit=async e=>{e.preventDefault();const text=$('#entry').value.trim();if(!text){$('#entry').focus();return}
+ const box=elem('div','','result');const ld=elem('div','','loading');ld.append(elem('span','','spin'),elem('span','Проверяем… обычно это 3–5 секунд'));box.append(ld);$('#output').replaceChildren(box);
+ const btn=$('#go');btn.disabled=true;
+ try{const r=await post('check',{message:text,kind:modes[mode].kind});const v=V[r.verdict]?r.verdict:'unknown';lastVerdict=v;
+  box.className='result assess r-'+v;box.replaceChildren(elem('div',r.source==='gemini'?'ИИ-оценка · Gemini':'Локальная проверка по признакам','src'),elem('div',V[v][0],'verdict v-'+v),elem('p',r.review),img('/assets/'+V[v][1]+'.png'));
+  if(r.notice)box.append(elem('small',r.notice,'notice'));
+  const vt=showVirusTotal(r.virusTotal);box.after(vt);
+  const next=elem('div','','next');const ex=elem('button',v==='low'?'Всё равно сомневаюсь — к специалисту':'Я уже кликнул(а) — нужна помощь →',v==='high'?'btn':'btn ghost');ex.onclick=()=>handoff('Проверял(а) через Digital Shield, результат: «'+V[v][0].replace('⚠ ','')+'».\nТекст:\n'+text+'\n\nЧто уже успел(а) сделать: ');next.append(ex);vt.after(next)
+ }catch(err){box.replaceChildren(elem('h3','Проверка недоступна'),elem('p',err.message))}
+ finally{btn.disabled=false}};
+
+function handoff(text){const c=$('#content'),summary=elem('textarea'),send=elem('button','Отправить специалисту','btn'),status=elem('p','','status');
+ summary.value=text;summary.maxLength=5000;summary.setAttribute('aria-label','Описание для специалиста');
+ c.replaceChildren(elem('div','Помощь специалиста','kicker'),elem('h2','Опишите, что случилось'),elem('p','Что произошло, что вы уже успели сделать и с чем нужна помощь. Не пишите пароли, коды и номера карт — специалисту они не нужны.','small'),summary,send,status);
+ $('#modal').showModal();summary.focus();
+ send.onclick=async()=>{if(!summary.value.trim()){summary.focus();return}send.disabled=true;
+  try{const {id}=await post('cases',{summary:summary.value,verdict:lastVerdict});addThread(id);$('#modal').close()}
+  catch(e){status.textContent=e.message;send.disabled=false}}}
+function addThread(id){const t=elem('div','','thread'),wait=elem('div','','wait');wait.append(elem('span','','spin'),elem('span','Специалист скоро ответит. Ответ появится здесь сам.'));
+ t.append(elem('h3','Обращение #'+id.slice(0,8)),wait);$('#threads').prepend(t);t.scrollIntoView({block:'nearest',behavior:'smooth'});
+ const timer=setInterval(async()=>{try{const {answer}=await post('status',{id});if(answer){clearInterval(timer);const a=elem('div','','answer');a.append(img('/assets/spec-thumb.png'),elem('p',answer));wait.replaceWith(elem('div','Ответ специалиста','src'),a)}}catch(e){clearInterval(timer);wait.replaceChildren(elem('span',e.message))}},5000)}
+$('#ask').onclick=()=>handoff($('#entry').value.trim()?'Текст, который меня насторожил:\n'+$('#entry').value.trim()+'\n\nЧто случилось: ':'');
+all('.buy').forEach(b=>b.onclick=()=>{$('#content').replaceChildren(elem('div','Тариф «'+b.dataset.plan+'»','kicker'),elem('h2','Оплата скоро появится'),elem('p','В этом прототипе оплата через Kaspi QR ещё не подключена. Пока можно бесплатно проверить сообщение или написать специалисту.'));$('#modal').showModal()});
+</script>
+</body>
+</html>
